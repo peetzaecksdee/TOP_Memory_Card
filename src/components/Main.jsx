@@ -1,12 +1,11 @@
-import { useState } from 'react';
+import Card from "./Card";
 
 function Main() {
-	const [score, setScore] = useState(0);
 
 	return (
 		<main>
-			<div className='score-container'>
-				<span className='score'>Score: {score}</span>
+			<div className='card-container'>
+				<Card title='cool'/>
 			</div>
 		</main> 
 	);
