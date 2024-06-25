@@ -1,13 +1,17 @@
 import Card from './Card';
 
-function Main() {
+function Main({ cards, onClick }) {
 	return (
 		<main>
 			<div className='card-container'>
-				<Card
-					title='cool'
-					src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/132.gif'
-				/>
+				{cards.map(([name, image]) => (
+					<Card
+						key={name}
+						title={name}
+						src={image}
+						onClick={() => onClick(name)}
+					/>
+				))}
 			</div>
 		</main>
 	);

@@ -1,15 +1,10 @@
-function Card({ title, src }) {
+function Card({ title, src, onClick }) {
 	return (
-		<div className='card'>
+		<div className='card' onClick={onClick}>
 			<img src={src} alt={title} />
 			<span>{title}</span>
 		</div>
 	);
-}
-
-Card.propTypes = {
-  title: String,
-  src: String,
 }
 
 export default Card;
