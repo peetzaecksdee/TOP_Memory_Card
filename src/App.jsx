@@ -5,37 +5,43 @@ import '@fontsource/nunito/600.css';
 import './App.css';
 import { useEffect, useState } from 'react';
 
-const pokemonCount = 760;
-const api = 'https://pokeapi.co/api/v2/pokemon/';
+const pokemonCount = 76;
 
 function App() {
 	const [score, setScore] = useState(0);
 	const [maxScore, setMaxScore] = useState(score);
 	const [pokemonData, setPokemonData] = useState([]);
 
-	function randomPokemon() {
-		return fetch(`${api}${Math.floor(Math.random() * pokemonCount + 1)}/`);
+	// I'm going fucking insane
+	async function randomPokemons(count) {
+		const res = await fetch(
+			`https://pokeapi.co/api/v2/pokemon?limit=${count}&offset=${Math.floor(
+				Math.random() * pokemonCount
+			)}/`
+		);
+		const res_1 = await res.json();
+		const res_2 = await Promise.all(
+			res_1.results.map((res_2) => fetch(res_2.url))
+		);
+		return await Promise.all(res_2.map(async (res_3) => {
+			const res_4 = await res_3.json();
+			return {
+				name: res_4.name,
+				sprite: res_4.sprites.other.showdown.front_default,
+				isClick: false,
+			};
+		}));
 	}
 
 	useEffect(() => {
-		async function fetchData() {
+		(async function fetchData() {
 			try {
-				const res = await Promise.all(
-					Array.from({ length: 10 }, () => randomPokemon(10))
-				);
-				const pokemons = await Promise.all(
-					res.map((response) => response.json())
-				);
-				const pokemonsData = pokemons.map((obj) => [
-					obj.name,
-					obj.sprites.other.showdown.front_default,
-				]);
-				setPokemonData(pokemonsData);
+				const response = await randomPokemons(15);
+				setPokemonData(response);
 			} catch (error) {
 				console.error(`Error fetching Pokemon data: ${error}`);
 			}
-		}
-		fetchData();
+		})();
 	}, []);
 
 	function shuffleData() {
@@ -44,10 +50,22 @@ function App() {
 		}
 	}
 
+	function resetGame() {}
+
+	function handleClick(e) {
+		if (
+			pokemonData.find((pokemon) => {
+				return pokemon.name === e.target.name && pokemon.isClick;
+			})
+		) {
+			resetGame();
+		}
+	}
+
 	return (
 		<>
 			<Header score={score} maxScore={maxScore} />
-			<Main cards={pokemonData} onClick={() => shuffleData()} />
+			<Main cards={pokemonData} onClick={(e) => handleClick(e)} />
 		</>
 	);
 }
