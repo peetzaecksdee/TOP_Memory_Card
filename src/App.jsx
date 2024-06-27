@@ -23,14 +23,16 @@ function App() {
 		const res_2 = await Promise.all(
 			res_1.results.map((res_2) => fetch(res_2.url))
 		);
-		return await Promise.all(res_2.map(async (res_3) => {
-			const res_4 = await res_3.json();
-			return {
-				name: res_4.name,
-				sprite: res_4.sprites.other.showdown.front_default,
-				isClick: false,
-			};
-		}));
+		return await Promise.all(
+			res_2.map(async (res_3) => {
+				const res_4 = await res_3.json();
+				return {
+					name: res_4.name,
+					sprite: res_4.sprites.other.showdown.front_default,
+					isClick: false,
+				};
+			})
+		);
 	}
 
 	useEffect(() => {
@@ -44,10 +46,25 @@ function App() {
 		})();
 	}, []);
 
-	function shuffleData() {
-		if (pokemonData.length > 0) {
-			setPokemonData([...pokemonData].sort(() => 0.5 - Math.random()));
+	function incrementScore() {
+		setScore(score + 1);
+		if (score + 1 > maxScore) {
+			setMaxScore(score + 1);
 		}
+	}
+
+	function shufflePokemons() {
+		setPokemonData(pokemonData => [...pokemonData].sort(() => 0.5 - Math.random()));
+	}
+
+	function setPokemon(pokemonName) {
+		setPokemonData( pokemonData =>
+			pokemonData.map((pokemon) => {
+				return pokemon.name === pokemonName
+					? { ...pokemon, isClick: true }
+					: pokemon;
+			})
+		);
 	}
 
 	function resetGame() {}
@@ -55,11 +72,15 @@ function App() {
 	function handleClick(e) {
 		if (
 			pokemonData.find((pokemon) => {
-				return pokemon.name === e.target.name && pokemon.isClick;
+				return pokemon.name === e && pokemon.isClick;
 			})
 		) {
+			console.log('suckie');
 			resetGame();
 		}
+
+		setPokemon(e);
+		shufflePokemons();
 	}
 
 	return (

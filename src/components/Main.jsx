@@ -9,7 +9,7 @@ function Main({ cards, onClick }) {
 						key={pokemon.name}
 						title={pokemon.name}
 						src={pokemon.sprite}
-						onClick={(e) => onClick(e)}
+						onClick={() => onClick(pokemon.name)}
 					/>
 				))}
 			</div>
