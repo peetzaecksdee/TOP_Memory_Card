@@ -8,6 +8,28 @@ import Modal from './components/Modal';
 
 const pokemonCount = 76;
 
+function randomWinningText() {
+	const winningTexts = [
+		'Good job!',
+		'Great work!',
+		'You did it!',
+		'Well done!',
+		'Sensational!',
+	];
+	return winningTexts[Math.floor(Math.random() * winningTexts.length)];
+}
+
+function randomLosingText() {
+	const losingTexts = [
+		'Keep trying!',
+		'You can do it!',
+		'You can do better!',
+		'Better luck next time!',
+		'You can do it next time!',
+	];
+	return losingTexts[Math.floor(Math.random() * losingTexts.length)];
+}
+
 function App() {
 	const [score, setScore] = useState(0);
 	const [maxScore, setMaxScore] = useState(score);
@@ -106,7 +128,7 @@ function App() {
 			return (
 				<>
 					<h1>!!! You win !!!</h1>
-					<span>Sensational!</span>
+					<span>{randomWinningText()}</span>
 				</>
 			);
 		} else {
@@ -114,6 +136,7 @@ function App() {
 				<>
 					<h1>! Game Over !</h1>
 					<span>You scored {score}</span>
+					<span>{randomLosingText()}</span>
 					<span>Resetting...</span>
 				</>
 			);
