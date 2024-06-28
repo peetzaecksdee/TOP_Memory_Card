@@ -35,15 +35,17 @@ function App() {
 		);
 	}
 
+	async function fetchData() {
+		try {
+			const response = await randomPokemons(15);
+			setPokemonData(response);
+		} catch (error) {
+			console.error(`Error fetching Pokemon data: ${error}`);
+		}
+	}
+
 	useEffect(() => {
-		(async function fetchData() {
-			try {
-				const response = await randomPokemons(15);
-				setPokemonData(response);
-			} catch (error) {
-				console.error(`Error fetching Pokemon data: ${error}`);
-			}
-		})();
+		fetchData();
 	}, []);
 
 	function incrementScore() {
@@ -67,7 +69,10 @@ function App() {
 		);
 	}
 
-	function resetGame() {}
+	function resetGame() {
+		setScore(0);
+		fetchData();
+	}
 
 	function handleClick(e) {
 		if (
@@ -75,10 +80,11 @@ function App() {
 				return pokemon.name === e && pokemon.isClick;
 			})
 		) {
-			console.log('suckie');
 			resetGame();
+			return;
 		}
 
+		incrementScore();
 		setPokemon(e);
 		shufflePokemons();
 	}
