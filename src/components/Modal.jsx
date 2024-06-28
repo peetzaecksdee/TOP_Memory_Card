@@ -1,4 +1,4 @@
-function Modal({ score = 0, className, children }) {
+function Modal({ className, children }) {
 	return (
 		<div className={`modal ${className}`}>
 			<div className='modal-content'>
