@@ -66,7 +66,7 @@ function App() {
 			try {
 				const response = await randomPokemons(15);
 				setIsLoading(false);
-				setScore(0);
+				setScore(13);
 				setPokemonData(response);
 			} catch (error) {
 				console.error(`Error fetching Pokemon data: ${error}`);
@@ -110,8 +110,11 @@ function App() {
 			pokemonData.find((pokemon) => {
 				return pokemon.name === e && pokemon.isClick;
 			}) ||
-			score === 15
+			score + 1 === 15
 		) {
+			if (score + 1 === 15) {
+				incrementScore();
+			}
 			resetGame();
 			return;
 		}
@@ -129,6 +132,7 @@ function App() {
 				<>
 					<h1>!!! You win !!!</h1>
 					<span>{randomWinningText()}</span>
+					<span>Resetting...</span>
 				</>
 			);
 		} else {

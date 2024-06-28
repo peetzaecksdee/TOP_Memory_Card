@@ -148,7 +148,7 @@
 	inset: -0.1rem;
 	z-index: -1;
 	background: linear-gradient(var(--gradient-angle), rgb(131, 163, 141), rgb(141, 131, 163), rgb(163, 141, 131));
-	animation: rotation 10s linear infinite;
+	animation: rotation 3s linear infinite;
 	border-radius: inherit;
 }
 
