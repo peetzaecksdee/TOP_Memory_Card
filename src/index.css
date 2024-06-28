@@ -71,7 +71,7 @@ main {
 	justify-content: center;
 	align-items: center;
 	padding: 1rem 0;
-	transition: filter 1s linear;
+	transition: filter 1s cubic-bezier(0.39, 0.575, 0.565, 1);
 }
 
 @media (prefers-color-scheme: light) {
