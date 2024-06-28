@@ -39,7 +39,7 @@
 	padding: 1rem;
 	width: 90%;
 	height: 100%;
-	grid-template-columns: repeat(5, 1fr);
+	grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
 	gap: 25px;
 }
 
@@ -153,5 +153,18 @@
 	}
 	100% {
 		--gradient-angle: 360deg;
+	}
+}
+
+/* Media Queries */
+
+@media (max-width: 600px) {
+	.card-container {
+		grid-template-columns: repeat(auto-fit, minmax(5rem, 1fr));
+	}
+
+	.card {
+		width: 7rem;
+		height: 7rem;
 	}
 }
