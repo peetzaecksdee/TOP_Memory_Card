@@ -66,7 +66,7 @@ function App() {
 			try {
 				const response = await randomPokemons(15);
 				setIsLoading(false);
-				setScore(13);
+				setScore(0);
 				setPokemonData(response);
 			} catch (error) {
 				console.error(`Error fetching Pokemon data: ${error}`);
