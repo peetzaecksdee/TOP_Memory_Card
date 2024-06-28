@@ -56,7 +56,9 @@ button:focus-visible {
 }
 
 header {
-	background-color: #141414;
+	background-color: #2f3338;
+	position: relative;
+	z-index: 2;
 	padding: 0.5rem 1rem;
 	display: flex;
 	align-content: center;
@@ -69,6 +71,7 @@ main {
 	justify-content: center;
 	align-items: center;
 	padding: 1rem 0;
+	transition: filter 1s linear;
 }
 
 @media (prefers-color-scheme: light) {

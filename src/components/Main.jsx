@@ -1,8 +1,8 @@
 import Card from './Card';
 
-function Main({ cards, onClick }) {
+function Main({ cards, onClick, className }) {
 	return (
-		<main>
+		<main className={className}>
 			<div className='card-container'>
 				{cards.map((pokemon) => (
 					<Card

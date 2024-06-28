@@ -4,6 +4,7 @@ import '@fontsource/nunito';
 import '@fontsource/nunito/600.css';
 import './App.css';
 import { useEffect, useState } from 'react';
+import Modal from './components/Modal';
 
 const pokemonCount = 76;
 
@@ -11,6 +12,7 @@ function App() {
 	const [score, setScore] = useState(0);
 	const [maxScore, setMaxScore] = useState(score);
 	const [pokemonData, setPokemonData] = useState([]);
+	const [isLoading, setIsLoading] = useState(false);
 
 	// I'm going fucking insane
 	async function randomPokemons(count) {
@@ -37,7 +39,9 @@ function App() {
 
 	async function fetchData() {
 		try {
+			setIsLoading(true);
 			const response = await randomPokemons(15);
+			setIsLoading(false);
 			setPokemonData(response);
 		} catch (error) {
 			console.error(`Error fetching Pokemon data: ${error}`);
@@ -92,7 +96,8 @@ function App() {
 	return (
 		<>
 			<Header score={score} maxScore={maxScore} />
-			<Main cards={pokemonData} onClick={(e) => handleClick(e)} />
+			<Main cards={pokemonData} onClick={(e) => handleClick(e)} className={isLoading && 'blur'} />
+			<Modal score={score} className={!isLoading && 'hidden'}/>
 		</>
 	);
 }
