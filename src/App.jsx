@@ -1,3 +1,5 @@
+// TODO: Difficulties w/ Endless
+
 import Header from './components/Header';
 import Main from './components/Main';
 import '@fontsource/nunito';
