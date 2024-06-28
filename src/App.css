@@ -59,7 +59,9 @@
 }
 
 .card:hover::before,
-.card:hover::after {
+.card:hover::after,
+.card:active::before,
+.card:active::after {
 	opacity: 1;
 }
 
