@@ -139,7 +139,26 @@
 	background-color: rgba(0, 0, 0, 0.4);
 }
 
+.modal-content::before,
+.modal-content::after {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 0;
+	inset: -0.1rem;
+	z-index: -1;
+	background: linear-gradient(var(--gradient-angle), rgb(131, 163, 141), rgb(141, 131, 163), rgb(163, 141, 131));
+	animation: rotation 10s linear infinite;
+	border-radius: inherit;
+}
+
+.modal-content::after {
+	filter: blur(2rem);
+}
+
 .modal-content {
+	position: relative;
+
 	background-color: #202020;
 	height: 20rem;
 	width: 20rem;
