@@ -37,15 +37,19 @@ function App() {
 		);
 	}
 
-	async function fetchData() {
-		try {
-			setIsLoading(true);
-			const response = await randomPokemons(15);
-			setIsLoading(false);
-			setPokemonData(response);
-		} catch (error) {
-			console.error(`Error fetching Pokemon data: ${error}`);
-		}
+	function fetchData() {
+		setIsLoading(true);
+		// To make modal persists
+		setTimeout(async () => {
+			try {
+				const response = await randomPokemons(15);
+				setIsLoading(false);
+				setScore(0);
+				setPokemonData(response);
+			} catch (error) {
+				console.error(`Error fetching Pokemon data: ${error}`);
+			}
+		}, 3000);
 	}
 
 	useEffect(() => {
@@ -60,11 +64,13 @@ function App() {
 	}
 
 	function shufflePokemons() {
-		setPokemonData(pokemonData => [...pokemonData].sort(() => 0.5 - Math.random()));
+		setPokemonData((pokemonData) =>
+			[...pokemonData].sort(() => 0.5 - Math.random())
+		);
 	}
 
 	function setPokemon(pokemonName) {
-		setPokemonData( pokemonData =>
+		setPokemonData((pokemonData) =>
 			pokemonData.map((pokemon) => {
 				return pokemon.name === pokemonName
 					? { ...pokemon, isClick: true }
@@ -74,7 +80,6 @@ function App() {
 	}
 
 	function resetGame() {
-		setScore(0);
 		fetchData();
 	}
 
@@ -96,8 +101,29 @@ function App() {
 	return (
 		<>
 			<Header score={score} maxScore={maxScore} />
-			<Main cards={pokemonData} onClick={(e) => handleClick(e)} className={isLoading && 'blur'} />
-			<Modal score={score} className={!isLoading && 'hidden'}/>
+			<Main
+				cards={pokemonData}
+				onClick={(e) => handleClick(e)}
+				className={isLoading && 'blur'}
+			/>
+			<Modal score={score} className={!isLoading && 'hidden'}>
+				{isLoading ? (
+					score === 0 ? (
+						<h1>! Loading Game !</h1>
+					) : (
+						<>
+							<h1>! Game Over !</h1>
+							<span>You scored {score}</span>
+							<span>Resetting...</span>
+						</>
+					)
+				) : (
+					<>
+						<h1>! Game Ready !</h1>
+						<span>Enjoy!</span>
+					</>
+				)}
+			</Modal>
 		</>
 	);
 }
