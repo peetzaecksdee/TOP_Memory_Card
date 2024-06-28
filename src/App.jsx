@@ -87,7 +87,8 @@ function App() {
 		if (
 			pokemonData.find((pokemon) => {
 				return pokemon.name === e && pokemon.isClick;
-			})
+			}) ||
+			score === 15
 		) {
 			resetGame();
 			return;
@@ -98,25 +99,38 @@ function App() {
 		shufflePokemons();
 	}
 
+	function DiffLoading() {
+		if (score === 0) {
+			return <h1>! Loading Game !</h1>;
+		} else if (score === 15) {
+			return (
+				<>
+					<h1>!!! You win !!!</h1>
+					<span>Sensational!</span>
+				</>
+			);
+		} else {
+			return (
+				<>
+					<h1>! Game Over !</h1>
+					<span>You scored {score}</span>
+					<span>Resetting...</span>
+				</>
+			);
+		}
+	}
+
 	return (
 		<>
 			<Header score={score} maxScore={maxScore} />
 			<Main
 				cards={pokemonData}
-				onClick={(e) => handleClick(e)}
+				onClick={handleClick}
 				className={isLoading && 'blur'}
 			/>
 			<Modal score={score} className={!isLoading && 'hidden'}>
 				{isLoading ? (
-					score === 0 ? (
-						<h1>! Loading Game !</h1>
-					) : (
-						<>
-							<h1>! Game Over !</h1>
-							<span>You scored {score}</span>
-							<span>Resetting...</span>
-						</>
-					)
+					<DiffLoading />
 				) : (
 					<>
 						<h1>! Game Ready !</h1>
