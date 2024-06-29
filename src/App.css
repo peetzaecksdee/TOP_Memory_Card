@@ -104,6 +104,34 @@
 	pointer-events: none;
 }
 
+.difficulties-container {
+	display: flex;
+	gap: 1rem;
+	align-content: center;
+	justify-content: center;
+}
+
+.easy.active {
+	background-color: var(--clr4);
+}
+.medium.active {
+	background-color: var(--clr3);
+}
+.hard.active {
+	background-color: var(--clr1);
+}
+.endless.active {
+	/* rainbow */
+	background: linear-gradient(
+		45deg,
+		var(--clr1),
+		var(--clr3),
+		var(--clr4)
+	);
+	animation: rainbow_animation 6s ease-in-out infinite;
+	background-size: 400% 100%;
+}
+
 /* Modal CSS */
 
 .blur {
@@ -177,6 +205,16 @@
 	}
 	100% {
 		--gradient-angle: 360deg;
+	}
+}
+
+@keyframes rainbow_animation {
+	0%,100% {
+			background-position: 0 0;
+	}
+
+	50% {
+			background-position: 100% 0;
 	}
 }
 

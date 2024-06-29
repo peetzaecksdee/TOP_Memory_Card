@@ -1,5 +1,3 @@
-// TODO: Difficulties w/ Endless
-
 import Header from './components/Header';
 import Main from './components/Main';
 import '@fontsource/nunito';
@@ -7,8 +5,6 @@ import '@fontsource/nunito/600.css';
 import './App.css';
 import { useEffect, useState } from 'react';
 import Modal from './components/Modal';
-
-const pokemonCount = 76;
 
 function randomWinningText() {
 	const winningTexts = [
@@ -32,17 +28,29 @@ function randomLosingText() {
 	return losingTexts[Math.floor(Math.random() * losingTexts.length)];
 }
 
+const difficultyChart = {
+	0: 5,
+	1: 5,
+	2: 10,
+	3: 15,
+};
+
 function App() {
 	const [score, setScore] = useState(0);
 	const [maxScore, setMaxScore] = useState(score);
 	const [pokemonData, setPokemonData] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
+	// 0 = Endless 1 = Easy 2 = Medium 3 = Hard
+	const [difficulty, setDifficulty] = useState(1);
+	const [pokemonCount, setPokemonCount] = useState(difficultyChart[1]);
+	// for endless
+	let lose = false;
 
 	// I'm going fucking insane
 	async function randomPokemons(count) {
 		const res = await fetch(
 			`https://pokeapi.co/api/v2/pokemon?limit=${count}&offset=${Math.floor(
-				Math.random() * pokemonCount
+				Math.random() * 760
 			)}/`
 		);
 		const res_1 = await res.json();
@@ -61,19 +69,21 @@ function App() {
 		);
 	}
 
-	function fetchData() {
+	function fetchData(count) {
 		setIsLoading(true);
 		// To make modal persists
 		setTimeout(async () => {
 			try {
-				const response = await randomPokemons(15);
+				const response = await randomPokemons(count || pokemonCount);
 				setIsLoading(false);
-				setScore(0);
+				if (difficulty !== 0 || lose) {
+					setScore(0);
+				}
 				setPokemonData(response);
 			} catch (error) {
 				console.error(`Error fetching Pokemon data: ${error}`);
 			}
-		}, 3000);
+		}, 1000);
 	}
 
 	useEffect(() => {
@@ -103,21 +113,19 @@ function App() {
 		);
 	}
 
-	function resetGame() {
-		fetchData();
-	}
-
 	function handleClick(e) {
 		if (
 			pokemonData.find((pokemon) => {
 				return pokemon.name === e && pokemon.isClick;
 			}) ||
-			score + 1 === 15
+			score + 1 === difficultyChart[difficulty]
 		) {
-			if (score + 1 === 15) {
+			if (score + 1 === difficultyChart[difficulty]) {
 				incrementScore();
+			} else {
+				lose = true;
 			}
-			resetGame();
+			fetchData();
 			return;
 		}
 
@@ -129,11 +137,15 @@ function App() {
 	function DiffLoading() {
 		if (score === 0) {
 			return <h1>! Loading Game !</h1>;
-		} else if (score === 15) {
+		} else if (score === difficultyChart[difficulty]) {
 			return (
 				<>
-					<h1>!!! You win !!!</h1>
-					<span>{randomWinningText()}</span>
+					{difficulty !== 0 && (
+						<>
+							<h1>!!! You win !!!</h1>
+							<span>{randomWinningText()}</span>
+						</>
+					)}
 					<span>Resetting...</span>
 				</>
 			);
@@ -149,9 +161,22 @@ function App() {
 		}
 	}
 
+	function difficultyChange(difficulty) {
+		if (isLoading) return false;
+
+		setDifficulty(difficulty);
+		fetchData(difficultyChart[difficulty]);
+		setPokemonCount(difficultyChart[difficulty]);
+		return true;
+	}
+
 	return (
 		<>
-			<Header score={score} maxScore={maxScore} />
+			<Header
+				score={score}
+				maxScore={maxScore}
+				difficultyChange={difficultyChange}
+			/>
 			<Main
 				cards={pokemonData}
 				onClick={handleClick}
