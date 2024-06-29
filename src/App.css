@@ -126,7 +126,8 @@
 		45deg,
 		var(--clr1),
 		var(--clr3),
-		var(--clr4)
+		var(--clr4),
+		var(--clr1)
 	);
 	animation: rainbow_animation 6s ease-in-out infinite;
 	background-size: 400% 100%;
