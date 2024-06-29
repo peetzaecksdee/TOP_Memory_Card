@@ -72,18 +72,19 @@ function App() {
 	function fetchData(count) {
 		setIsLoading(true);
 		// To make modal persists
-		setTimeout(async () => {
-			try {
+		try {
+			setTimeout(async () => {
 				const response = await randomPokemons(count || pokemonCount);
 				setIsLoading(false);
 				if (difficulty !== 0 || lose) {
 					setScore(0);
 				}
 				setPokemonData(response);
-			} catch (error) {
-				console.error(`Error fetching Pokemon data: ${error}`);
-			}
-		}, 1000);
+			}, 1000);
+		} catch (error) {
+			console.error(`Error fetching Pokemon data: ${error}`);
+			fetchData(count || pokemonCount);
+		}
 	}
 
 	useEffect(() => {
@@ -118,7 +119,7 @@ function App() {
 			pokemonData.find((pokemon) => {
 				return pokemon.name === e && pokemon.isClick;
 			}) ||
-			(difficulty === 0 && score + (1 % difficultyChart[difficulty]) === 0) ||
+			(difficulty === 0 && (score + 1) % difficultyChart[difficulty] === 0) ||
 			score + 1 === difficultyChart[difficulty]
 		) {
 			if (
@@ -142,7 +143,7 @@ function App() {
 	function DiffLoading() {
 		if (score === 0) {
 			return <h1>! Loading Game !</h1>;
-		} else if (score === difficultyChart[difficulty]) {
+		} else if (score === difficultyChart[difficulty] || (difficulty === 0 && score % difficultyChart[difficulty] === 0)) {
 			return (
 				<>
 					{difficulty !== 0 && (
@@ -185,9 +186,9 @@ function App() {
 			<Main
 				cards={pokemonData}
 				onClick={handleClick}
-				className={isLoading && 'blur'}
+				className={isLoading ? 'blur' : ''}
 			/>
-			<Modal score={score} className={!isLoading && 'hidden'}>
+			<Modal score={score} className={!isLoading ? 'hidden' : ''}>
 				{isLoading ? (
 					<DiffLoading />
 				) : (
