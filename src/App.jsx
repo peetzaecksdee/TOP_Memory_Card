@@ -118,12 +118,17 @@ function App() {
 			pokemonData.find((pokemon) => {
 				return pokemon.name === e && pokemon.isClick;
 			}) ||
+			(difficulty === 0 && score + (1 % difficultyChart[difficulty]) === 0) ||
 			score + 1 === difficultyChart[difficulty]
 		) {
-			if (score + 1 === difficultyChart[difficulty]) {
-				incrementScore();
-			} else {
+			if (
+				pokemonData.find((pokemon) => {
+					return pokemon.name === e && pokemon.isClick;
+				})
+			) {
 				lose = true;
+			} else {
+				incrementScore();
 			}
 			fetchData();
 			return;
